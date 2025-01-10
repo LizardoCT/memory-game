@@ -5,7 +5,7 @@
 }
 
 body {
-  height: 100vh;
+  height: 120vh;
   background: #74ebd5;
   background: -webkit-linear-gradient(to right, #ACB6E5, #74ebd5);
   background: linear-gradient(to right, #ACB6E5, #74ebd5);
@@ -67,5 +67,116 @@ section {
   section {
     grid-template-columns: repeat(4, 5rem);
     grid-template-rows: repeat(4, 5rem);
+  }
+}
+
+
+@property --wipe-position {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+
+.wipe-container {
+  position: relative;
+  display: inline-block;
+  width: 300px;
+  /* Cambia según el tamaño de la imagen */
+  height: 200px;
+  /* Cambia según el tamaño de la imagen */
+  overflow: hidden;
+}
+
+.wipe {
+  --wipe-position: 100%;
+  --gradient-length: 20%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  /* Aplicamos la máscara */
+  -webkit-mask-image: linear-gradient(to bottom right,
+      black var(--wipe-position),
+      transparent calc(var(--wipe-position) + var(--gradient-length)),
+      transparent);
+  mask-image: linear-gradient(to bottom right,
+      black var(--wipe-position),
+      transparent calc(var(--wipe-position) + var(--gradient-length)),
+      transparent);
+
+  /* Transición suave */
+  transition: --wipe-position 1.5s cubic-bezier(0, 0.55, 0.45, 1);
+}
+
+.wipe-container:hover .wipe {
+  --wipe-position: calc(-1 * var(--gradient-length));
+}
+
+
+.demo-1 {
+  background: url(../img/nature-sprite.png) no-repeat -9999px -9999px;
+  background-size: 0;
+}
+
+.demo-1 .page-view {
+  background: url(../img/nature-sprite-2.png) no-repeat -9999px -9999px;
+  background-size: 0;
+}
+
+.demo-1 .page-view .project:nth-child(1) {
+  background-image: url(../img/nature-1.jpg);
+}
+
+.demo-1 .page-view .project:nth-child(2) {
+  background-image: url(../img/nature-2.jpg);
+}
+
+.demo-1 .page-view .project:nth-child(3) {
+  background-image: url(../img/nature-3.jpg);
+}
+
+.demo-1 .page-view .project:nth-child(4) {
+  background-image: url(../img/nature-4.jpg);
+}
+
+.demo-1 .page-view .project:nth-child(even).hide {
+  -webkit-mask: url(../img/nature-sprite.png);
+  mask: url(../img/nature-sprite.png);
+  -webkit-mask-size: 2300% 100%;
+  mask-size: 2300% 100%;
+  -webkit-animation: mask-play 1.4s steps(22) forwards;
+  animation: mask-play 1.4s steps(22) forwards;
+}
+
+.demo-1 .page-view .project:nth-child(odd).hide {
+  -webkit-mask: url(../img/nature-sprite-2.png);
+  mask: url(../img/nature-sprite-2.png);
+  -webkit-mask-size: 7100% 100%;
+  mask-size: 7100% 100%;
+  -webkit-animation: mask-play 1.4s steps(70) forwards;
+  animation: mask-play 1.4s steps(70) forwards;
+}
+
+@-webkit-keyframes mask-play {
+  from {
+    -webkit-mask-position: 0% 0;
+    mask-position: 0% 0;
+  }
+
+  to {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+}
+
+@keyframes mask-play {
+  from {
+    -webkit-mask-position: 0% 0;
+    mask-position: 0% 0;
+  }
+
+  to {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
   }
 }
