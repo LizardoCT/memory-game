@@ -1,119 +1,191 @@
-// Grab a couple of things
-const section = document.querySelector('section')
-const playerLivesCount = document.querySelector('span')
-let playerLives = 6
+document.addEventListener('DOMContentLoaded', () => {
+  const images = [
+    './images/beatles.webp',
+    './images/blink182.webp',
+    './images/fkatwigs.webp',
+    './images/fleetwood.webp',
+    './images/greenday.webp',
+    './images/kiss.webp',
+    './images/metallica.webp',
+    './images/pinkfloyd.webp',
+  ]
 
-// Link text
-playerLivesCount.textContent = playerLives
+  let cards = []
+  let flippedCards = []
+  let lives = 6
+  let isLocked = false
 
-// Generate the data
-const getData = () => [
-  { imgSrc: './images/beatles.webp', name: 'The Beatles' },
-  { imgSrc: './images/blink182.webp', name: 'blink 182' },
-  { imgSrc: './images/fkatwigs.webp', name: 'fka twigs' },
-  { imgSrc: './images/fleetwood.webp', name: 'fleetwood' },
-  { imgSrc: './images/greenday.webp', name: 'green day' },
-  { imgSrc: './images/kiss.webp', name: 'kiss' },
-  { imgSrc: './images/metallica.webp', name: 'metallica' },
-  { imgSrc: './images/pinkfloyd.webp', name: 'pink floyd' },
-  { imgSrc: './images/beatles.webp', name: 'The Beatles' },
-  { imgSrc: './images/blink182.webp', name: 'blink 182' },
-  { imgSrc: './images/fkatwigs.webp', name: 'fka twigs' },
-  { imgSrc: './images/fleetwood.webp', name: 'fleetwood' },
-  { imgSrc: './images/greenday.webp', name: 'green day' },
-  { imgSrc: './images/kiss.webp', name: 'kiss' },
-  { imgSrc: './images/metallica.webp', name: 'metallica' },
-  { imgSrc: './images/pinkfloyd.webp', name: 'pink floyd' },
-]
+  function showGameOverMessage(message1, message2) {
+    const messageElement1 = document.getElementById('game-message-1')
+    const messageElement2 = document.getElementById('game-message-2')
 
-// Randomize
-const randomize = () => {
-  const cardData = getData()
-  cardData.sort(() => Math.random() - 0.5)
-  return cardData
-}
+    // Asignar los mensajes a los párrafos
+    messageElement1.textContent = message1
+    messageElement2.textContent = message2
 
-// Card generate function
-const cardGenerator = () => {
-  const cardData = randomize()
-  // Generate the HTML
-  cardData.forEach((item) => {
-    const card = document.createElement('div')
-    const face = document.createElement('img')
-    const back = document.createElement('div')
-    card.classList = 'card'
-    face.classList = 'face'
-    back.classList = 'back'
-    // Attach the image to the card
-    face.src = item.imgSrc
-    card.setAttribute('name', item.name)
-    // Attach the data to the section
-    section.appendChild(card)
-    card.appendChild(face)
-    card.appendChild(back)
+    // Mostrar el modal
+    document.getElementById('game-over').classList.remove('hidden')
+    // Mostrar el overlay (fondo oscuro)
+    document.getElementById('overlay').classList.remove('hidden')
+  }
 
-    card.addEventListener('click', (e) => {
-      card.classList.toggle('toggleCard')
-      checkCards(e)
+  function createCards() {
+    const duplicatedImages = [...images, ...images]
+    return duplicatedImages
+      .sort(() => Math.random() - 0.5)
+      .map((image, index) => ({
+        id: index,
+        image,
+        isFlipped: false,
+        isMatched: false,
+      }))
+  }
+
+  function updateUI() {
+    document.getElementById('lives-count').textContent = lives.toString()
+  }
+
+  function createGameGrid() {
+    const gameGrid = document.getElementById('game-grid')
+    gameGrid.innerHTML = ''
+
+    cards.forEach((card, index) => {
+      const cardElement = document.createElement('div')
+      cardElement.className = 'card'
+      cardElement.dataset.index = index.toString()
+      cardElement.textContent = '❓'
+
+      cardElement.addEventListener('click', () => handleCardClick(index))
+      gameGrid.appendChild(cardElement)
     })
-  })
-}
+  }
 
-// Check cards
-const checkCards = (e) => {
-  const clickedCard = e.target
-  clickedCard.classList.add('flipped')
-  const flippedCards = document.querySelectorAll('.flipped')
-  const toggleCard = document.querySelectorAll('.toggleCard')
-  // Logic the matches
-  if (flippedCards.length === 2) {
-    if (
-      flippedCards[0].getAttribute('name') ===
-      flippedCards[1].getAttribute('name')
-    ) {
-      // console.log('match')
-      flippedCards.forEach((card) => {
-        card.classList.remove('flipped')
-        card.style.pointerEvents = 'none'
-      })
+  function flipCard(index, show) {
+    const cardElement = document.querySelector(`[data-index="${index}"]`)
+    if (show) {
+      cardElement.classList.add('flipped')
+      cardElement.innerHTML = `<img src="${cards[index].image}" alt="card front">`
     } else {
-      // console.log('no match')
-      flippedCards.forEach((card) => {
-        card.classList.remove('flipped')
-        setTimeout(() => card.classList.remove('toggleCard'), 1000)
-      })
-      playerLives--
-      playerLivesCount.textContent = playerLives
-      if (playerLives === 0) {
-        restart('Try again!')
+      cardElement.classList.remove('flipped')
+      cardElement.textContent = '❓'
+    }
+  }
+
+  function handleCardClick(index) {
+    if (
+      isLocked ||
+      flippedCards.length === 2 ||
+      cards[index].isFlipped ||
+      cards[index].isMatched
+    ) {
+      return
+    }
+
+    flipCard(index, true)
+    cards[index].isFlipped = true
+    flippedCards.push(index)
+
+    if (flippedCards.length === 2) {
+      isLocked = true
+
+      const [firstIndex, secondIndex] = flippedCards
+
+      if (cards[firstIndex].image === cards[secondIndex].image) {
+        cards[firstIndex].isMatched = true
+        cards[secondIndex].isMatched = true
+
+        // Añadir la clase para la animación de escala
+        const firstCardElement = document.querySelector(
+          `[data-index="${firstIndex}"]`
+        )
+        const secondCardElement = document.querySelector(
+          `[data-index="${secondIndex}"]`
+        )
+
+        setTimeout(() => {
+          firstCardElement.classList.add('match')
+          secondCardElement.classList.add('match')
+        }, 1000)
+
+        // Remover la clase después de la animación
+        setTimeout(() => {
+          firstCardElement.classList.remove('match')
+          secondCardElement.classList.remove('match')
+          isLocked = false
+          flippedCards = []
+        }, 500)
+
+        if (cards.every((card) => card.isMatched)) {
+          setTimeout(() => {
+            showGameOverMessage('¡YOU WIN!', 'Has ganado el juego 🤑')
+          }, 500)
+        }
+      } else {
+        lives--
+        updateUI()
+
+        if (lives <= 0) {
+          setTimeout(() => {
+            flipCard(firstIndex, false)
+            flipCard(secondIndex, false)
+            cards[firstIndex].isFlipped = false
+            cards[secondIndex].isFlipped = false
+            flippedCards = []
+            showGameOverMessage('¡GAME OVER!', 'Has perdido todas tus vidas 😓')
+          }, 1000)
+          return
+        }
+
+        setTimeout(() => {
+          flipCard(firstIndex, false)
+          flipCard(secondIndex, false)
+          cards[firstIndex].isFlipped = false
+          cards[secondIndex].isFlipped = false
+          flippedCards = []
+          isLocked = false
+        }, 1000)
       }
     }
   }
-  // Run a check to see if the game is won
-  if (toggleCard.length === 16) {
-    restart('You won!')
-  }
-}
 
-// Restart
-const restart = (text) => {
-  let cardData = randomize()
-  let faces = document.querySelectorAll('.face')
-  let cards = document.querySelectorAll('.card')
-  section.style.pointerEvents = 'none'
-  cardData.forEach((item, index) => {
-    cards[index].classList.remove('toggleCard')
-    // Randomize the cards
+  function resetMatchedCards(callback) {
+    const matchedCards = cards.filter((card) => card.isMatched)
+
+    matchedCards.forEach((card) => {
+      const cardElement = document.querySelector(`[data-index="${card.id}"]`)
+      if (cardElement) {
+        card.isFlipped = false // Marcar como no volteada
+        flipCard(card.id, false) // Usar la animación de volteo existente
+      }
+    })
+
+    // Esperar a que termine la animación antes de continuar
     setTimeout(() => {
-      cards[index].style.pointerEvents = 'all'
-      faces[index].src = item.imgSrc
-      cards[index].setAttribute('name', item.name)
-      section.style.pointerEvents = 'all'
-    }, 1000)
-  })
-  playerLives = 6
-  playerLivesCount.textContent = playerLives
-  setTimeout(() => window.alert(text), 1000)
-}
+      if (callback) callback()
+    }, 500) // Ajusta este tiempo según la duración de tu animación
+  }
 
-cardGenerator()
+  function restartGame() {
+    lives = 6
+    flippedCards = []
+    isLocked = false
+    cards = createCards()
+    document.getElementById('game-over').classList.add('hidden')
+    document.getElementById('overlay').classList.add('hidden')
+    createGameGrid()
+    updateUI()
+  }
+
+  // Event listeners
+  document
+    .getElementById('restart-button')
+    .addEventListener('click', restartGame)
+  document.getElementById('play-again').addEventListener('click', () => {
+    resetMatchedCards(() => {
+      restartGame() // Reinicia el juego después de voltear las cartas
+    })
+  })
+
+  // Initialize game
+  restartGame()
+})

@@ -5,68 +5,173 @@
 }
 
 body {
-  height: 120vh;
+  margin: 0;
+  height: 100dvh;
   background: #74ebd5;
   background: -webkit-linear-gradient(to right, #ACB6E5, #74ebd5);
   background: linear-gradient(to right, #ACB6E5, #74ebd5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
+
 
 h1 {
-  padding-bottom: 1rem;
+  text-align: center;
+  font: 1.7rem;
+  margin-top: 0;
+  margin-bottom: 3rem;
+  color: #212121;
+  text-transform: uppercase;
 }
 
-section {
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.game-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.lives {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #212121;
+}
+
+p {
+  margin: 0 0 20px;
+}
+
+#game-message-1 {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.game-grid {
   display: grid;
-  grid-template-columns: repeat(4, 10rem);
-  grid-template-rows: repeat(4, 10rem);
-  grid-gap: 1rem;
-  perspective: 800px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
 }
 
 .card {
   position: relative;
+  aspect-ratio: 1;
+  background: #f1f1f1;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+
   transform-style: preserve-3d;
   transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, .2);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, .1);
 }
 
-.face,
-.back {
+.card img {
   width: 100%;
   height: 100%;
-  position: absolute;
-  border-radius: 5px;
+  object-fit: contain;
+  border-radius: 10px;
   pointer-events: none;
-}
-
-.back {
-  background: white;
+  transform: rotateY(-180deg);
   backface-visibility: hidden;
 }
 
-.toggleCard {
+.card.flipped {
   transform: rotateY(180deg);
+  backface-visibility: visible;
 }
 
-.face {
-  transform: rotateY(-180deg);
+button {
+  padding: 0.5rem 1rem;
+  background: #CE0C13;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bold;
 }
 
-@media screen and (max-width: 900px) {
-  section {
-    grid-template-columns: repeat(4, 8rem);
-    grid-template-rows: repeat(4, 8rem);
+button:hover {
+  background: #ee3036;
+}
+
+.hidden {
+  display: none;
+}
+
+.game-over {
+  position: fixed;
+  width: 250px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #f1f1f1;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  z-index: 2;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  /* Fondo oscuro semi-transparente */
+  z-index: 1;
+  /* Debe estar detrás del modal */
+}
+
+.card.matched {
+  pointer-events: none;
+}
+
+.card.match {
+  animation: match-scale 0.5s ease-in-out;
+}
+
+@keyframes match-scale {
+  0% {
+    transform: rotateY(180deg) scale(1);
+    /* Mantén el frente visible y escala normal */
+  }
+
+  50% {
+    transform: rotateY(180deg) scale(1.1);
+    /* Aumenta el tamaño */
+  }
+
+  100% {
+    transform: rotateY(180deg) scale(1);
+    /* Regresa al tamaño original */
   }
 }
 
-@media screen and (max-width: 600px) {
-  section {
-    grid-template-columns: repeat(4, 5rem);
-    grid-template-rows: repeat(4, 5rem);
+@media screen and (max-width: 700px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  h1 {
+    margin-bottom: 5rem;
+  }
+
+  .card {
+    font-size: 1.5rem;
   }
 }
 
@@ -110,73 +215,4 @@ section {
 
 .wipe-container:hover .wipe {
   --wipe-position: calc(-1 * var(--gradient-length));
-}
-
-
-.demo-1 {
-  background: url(../img/nature-sprite.png) no-repeat -9999px -9999px;
-  background-size: 0;
-}
-
-.demo-1 .page-view {
-  background: url(../img/nature-sprite-2.png) no-repeat -9999px -9999px;
-  background-size: 0;
-}
-
-.demo-1 .page-view .project:nth-child(1) {
-  background-image: url(../img/nature-1.jpg);
-}
-
-.demo-1 .page-view .project:nth-child(2) {
-  background-image: url(../img/nature-2.jpg);
-}
-
-.demo-1 .page-view .project:nth-child(3) {
-  background-image: url(../img/nature-3.jpg);
-}
-
-.demo-1 .page-view .project:nth-child(4) {
-  background-image: url(../img/nature-4.jpg);
-}
-
-.demo-1 .page-view .project:nth-child(even).hide {
-  -webkit-mask: url(../img/nature-sprite.png);
-  mask: url(../img/nature-sprite.png);
-  -webkit-mask-size: 2300% 100%;
-  mask-size: 2300% 100%;
-  -webkit-animation: mask-play 1.4s steps(22) forwards;
-  animation: mask-play 1.4s steps(22) forwards;
-}
-
-.demo-1 .page-view .project:nth-child(odd).hide {
-  -webkit-mask: url(../img/nature-sprite-2.png);
-  mask: url(../img/nature-sprite-2.png);
-  -webkit-mask-size: 7100% 100%;
-  mask-size: 7100% 100%;
-  -webkit-animation: mask-play 1.4s steps(70) forwards;
-  animation: mask-play 1.4s steps(70) forwards;
-}
-
-@-webkit-keyframes mask-play {
-  from {
-    -webkit-mask-position: 0% 0;
-    mask-position: 0% 0;
-  }
-
-  to {
-    -webkit-mask-position: 100% 0;
-    mask-position: 100% 0;
-  }
-}
-
-@keyframes mask-play {
-  from {
-    -webkit-mask-position: 0% 0;
-    mask-position: 0% 0;
-  }
-
-  to {
-    -webkit-mask-position: 100% 0;
-    mask-position: 100% 0;
-  }
 }
