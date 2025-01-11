@@ -27,6 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('game-over').classList.remove('hidden')
     // Mostrar el overlay (fondo oscuro)
     document.getElementById('overlay').classList.remove('hidden')
+
+    // Animación de confeti solo si el jugador gana
+    if (message1 === '¡YOU WIN!') {
+      confetti({
+        particleCount: 200,
+        spread: 150,
+        origin: { x: 0.5, y: 0.6 },
+      })
+    }
   }
 
   function createCards() {
@@ -121,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }, 500)
         }
       } else {
-        lives--
+        // lives--
         updateUI()
 
         if (lives <= 0) {
@@ -151,6 +160,12 @@ document.addEventListener('DOMContentLoaded', () => {
   function resetMatchedCards(callback) {
     const matchedCards = cards.filter((card) => card.isMatched)
 
+    // Verificar si hay cartas que hicieron match
+    if (matchedCards.length === 0) {
+      if (callback) callback() // Llamar al callback inmediatamente si no hay cartas
+      return
+    }
+
     matchedCards.forEach((card) => {
       const cardElement = document.querySelector(`[data-index="${card.id}"]`)
       if (cardElement) {
@@ -162,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Esperar a que termine la animación antes de continuar
     setTimeout(() => {
       if (callback) callback()
-    }, 500) // Ajusta este tiempo según la duración de tu animación
+    }, 400) // Ajusta este tiempo según la duración de tu animación
   }
 
   function restartGame() {
@@ -177,9 +192,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Event listeners
-  document
-    .getElementById('restart-button')
-    .addEventListener('click', restartGame)
+  document.getElementById('restart-button').addEventListener('click', () => {
+    resetMatchedCards(() => {
+      restartGame() // Reinicia el juego después de voltear las cartas
+    })
+  })
+
   document.getElementById('play-again').addEventListener('click', () => {
     resetMatchedCards(() => {
       restartGame() // Reinicia el juego después de voltear las cartas
