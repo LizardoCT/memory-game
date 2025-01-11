@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }, 500)
         }
       } else {
-        // lives--
+        lives--
         updateUI()
 
         if (lives <= 0) {
