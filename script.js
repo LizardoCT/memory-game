@@ -51,7 +51,44 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateUI() {
-    document.getElementById('lives-count').textContent = lives.toString()
+    const livesCountElement = document.getElementById('lives-count')
+    const heart = document.querySelector('.heart')
+    const heartBroken = document.querySelector('.heart-broken')
+    const currentLives = lives // Asume que `lives` es la variable global para las vidas restantes
+
+    // Animación para el contador de vidas
+    livesCountElement.classList.add('fade-out')
+
+    setTimeout(() => {
+      // Actualizar el contenido del contador
+      livesCountElement.textContent = currentLives.toString()
+
+      // Cambiar a fade-in
+      livesCountElement.classList.remove('fade-out')
+      livesCountElement.classList.add('fade-in')
+
+      // Remover la clase fade-in después de la animación
+      setTimeout(() => {
+        livesCountElement.classList.remove('fade-in')
+      }, 500) // Duración de la animación de fade-in
+    }, 500) // Duración de fade-out
+
+    // Animación para los corazones
+    if (currentLives < 6) {
+      // Ocultar el corazón actual y mostrar el corazón roto con animación
+      heart.classList.add('hidden')
+      heartBroken.classList.remove('hidden')
+      heartBroken.classList.add('animate')
+
+      setTimeout(() => {
+        heartBroken.classList.remove('animate')
+        heartBroken.classList.add('hidden')
+        heart.classList.remove('hidden')
+      }, 1000) // Duración de la animación del corazón roto
+    } else if (currentLives === 0) {
+      heart.classList.add('hidden')
+      heartBroken.classList.add('hidden')
+    }
   }
 
   function createGameGrid() {
