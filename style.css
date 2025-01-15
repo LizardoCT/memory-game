@@ -15,7 +15,7 @@ body {
 .my-title {
   position: absolute;
   width: max-content;
-  top: 50%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
   color: white;
@@ -28,6 +28,7 @@ body {
 .my-title h4 {
   font-family: "Gloria Hallelujah", serif;
   font-size: 5rem;
+  text-align: center;
 }
 
 .my-title article {
@@ -52,6 +53,7 @@ body {
 .transition-row {
   flex: 1;
   display: flex;
+  overflow: hidden;
 }
 
 .transition-row.row-1 .block {
@@ -67,6 +69,9 @@ body {
   background-color: #212121;
   transform: scaleY(1);
   will-change: transform;
+
+  backface-visibility: hidden;
+  transform: scale(1.01);
 }
 
 h1 {
