@@ -1,13 +1,53 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const ease = 'power4.inOut'
+
+  revealTransition().then(() => {
+    gsap.set('.block', { visibility: 'hidden' })
+    gsap.set('.my-title', { display: 'none' })
+  })
+
+  function revealTransition() {
+    return new Promise((resolve) => {
+      // show title
+      const title = document.querySelector('.my-title')
+      gsap.to(title, {
+        opacity: 1,
+        duration: 1.2,
+        onComplete: () => {
+          // hide title and show blocks
+          gsap.to(title, {
+            opacity: 0,
+            duration: 0.5,
+            onComplete: () => {
+              gsap.set('.block', { scaleY: 1 })
+              gsap.to('.block', {
+                scaleY: 0,
+                duration: 1,
+                stagger: {
+                  each: 0.1,
+                  from: 'start',
+                  grid: 'auto',
+                  axis: 'x',
+                },
+                ease: ease,
+                onComplete: resolve,
+              })
+            },
+          })
+        },
+      })
+    })
+  }
+
   const images = [
-    './images/beatles.webp',
-    './images/blink182.webp',
-    './images/fkatwigs.webp',
-    './images/fleetwood.webp',
-    './images/greenday.webp',
-    './images/kiss.webp',
-    './images/metallica.webp',
-    './images/pinkfloyd.webp',
+    './images/miko.webp',
+    './images/avicii.webp',
+    './images/malone.webp',
+    './images/ed.webp',
+    './images/sting.webp',
+    './images/usher.webp',
+    './images/drake.webp',
+    './images/weeknd.webp',
   ]
 
   let cards = []

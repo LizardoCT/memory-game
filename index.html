@@ -4,42 +4,64 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="favicon.svg" type="image/x-icon">
-  <title>Memory Game 🚗</title>
+  <title>Memory Game 🎮</title>
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <div class="container">
-      <h1>Memory Game 🎮</h1>
-
-      <div class="game-info">
-        <div class="lives">
-          Vidas: <span id="lives-count">6</span>
-          <span class="heart">❤️</span>
-          <span class="heart-broken hidden">💔</span>
-        </div>
-        <button id="restart-button">Reiniciar Juego</button>
-      </div>
-      
-      <div class="game-grid" id="game-grid">
-      </div>
-
-      <div id="overlay" class="overlay hidden"></div>
-      
-      <div id="game-over" class="game-over hidden">
-        <p>
-          <span id="game-message-1"></span>
-          <br>
-          <span id="game-message-2"></span>
-        </p>
-        <button id="play-again">Jugar de nuevo</button>
-      </div>
-      <span class="footer">By <a target="_blank" href="https://github.com/LizardoCT/memory-game">Nene.</a></span>
+  <div class="transition">
+    <div class="my-title">
+      <h4>Memory Game</h4>
+      <br>
+      <article>- Remember and match the cards</article>
     </div>
+    <div class="transition-row row-1">
+      <div class="block"></div>
+      <div class="block"></div>
+      <div class="block"></div>
+      <div class="block"></div>
+      <div class="block"></div>
+    </div>
+    <div class="transition-row row-2">
+      <div class="block"></div>
+      <div class="block"></div>
+      <div class="block"></div>
+      <div class="block"></div>
+      <div class="block"></div>
+    </div>
+  </div>
 
+  <div class="container">
+    <h1>Memory Game 🎮</h1>
+  
+    <div class="game-info">
+      <div class="lives">
+        Vidas: <span id="lives-count">6</span>
+        <span class="heart">❤️</span>
+        <span class="heart-broken hidden">💔</span>
+      </div>
+      <button id="restart-button">Reiniciar Juego</button>
+    </div>
+    
+    <div class="game-grid" id="game-grid">
+    </div>
+  
+    <div id="overlay" class="overlay hidden"></div>
+    
+    <div id="game-over" class="game-over hidden">
+      <p>
+        <span id="game-message-1"></span>
+        <br>
+        <span id="game-message-2"></span>
+      </p>
+      <button id="play-again">Jugar de nuevo</button>
+    </div>
+    <span class="footer">By <a target="_blank" href="https://github.com/LizardoCT/memory-game">Nene.</a></span>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script src="script.js"></script>
 </body>
