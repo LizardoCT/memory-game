@@ -55,6 +55,8 @@ memory-game/
 
 ![image](https://github.com/user-attachments/assets/759ba9ed-7f5b-43f9-9bc6-f059b93a3857)
 
+![ss](https://github.com/user-attachments/assets/eba1b675-9faf-4ce3-8e19-6f638593888a)
+
 ---
 
 ## ❤️ Thanks for playing
