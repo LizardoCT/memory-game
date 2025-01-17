@@ -59,16 +59,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageElement1 = document.getElementById('game-message-1')
     const messageElement2 = document.getElementById('game-message-2')
 
-    // Asignar los mensajes a los párrafos
     messageElement1.textContent = message1
     messageElement2.textContent = message2
 
-    // Mostrar el modal
     document.getElementById('game-over').classList.remove('hidden')
-    // Mostrar el overlay (fondo oscuro)
     document.getElementById('overlay').classList.remove('hidden')
 
-    // Animación de confeti solo si el jugador gana
     if (message1 === '¡YOU WIN!') {
       confetti({
         particleCount: 200,
@@ -94,28 +90,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const livesCountElement = document.getElementById('lives-count')
     const heart = document.querySelector('.heart')
     const heartBroken = document.querySelector('.heart-broken')
-    const currentLives = lives // Asume que `lives` es la variable global para las vidas restantes
+    const currentLives = lives
 
-    // Animación para el contador de vidas
     livesCountElement.classList.add('fade-out')
 
     setTimeout(() => {
-      // Actualizar el contenido del contador
       livesCountElement.textContent = currentLives.toString()
 
-      // Cambiar a fade-in
       livesCountElement.classList.remove('fade-out')
       livesCountElement.classList.add('fade-in')
 
-      // Remover la clase fade-in después de la animación
       setTimeout(() => {
         livesCountElement.classList.remove('fade-in')
-      }, 500) // Duración de la animación de fade-in
-    }, 500) // Duración de fade-out
+      }, 500)
+    }, 500)
 
-    // Animación para los corazones
     if (currentLives < 6) {
-      // Ocultar el corazón actual y mostrar el corazón roto con animación
       heart.classList.add('hidden')
       heartBroken.classList.remove('hidden')
       heartBroken.classList.add('animate')
@@ -124,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         heartBroken.classList.remove('animate')
         heartBroken.classList.add('hidden')
         heart.classList.remove('hidden')
-      }, 1000) // Duración de la animación del corazón roto
+      }, 1000)
     } else if (currentLives === 0) {
       heart.classList.add('hidden')
       heartBroken.classList.add('hidden')
@@ -180,7 +170,6 @@ document.addEventListener('DOMContentLoaded', () => {
         cards[firstIndex].isMatched = true
         cards[secondIndex].isMatched = true
 
-        // Añadir la clase para la animación de escala
         const firstCardElement = document.querySelector(
           `[data-index="${firstIndex}"]`
         )
@@ -193,7 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
           secondCardElement.classList.add('match')
         }, 1000)
 
-        // Remover la clase después de la animación
         setTimeout(() => {
           firstCardElement.classList.remove('match')
           secondCardElement.classList.remove('match')
@@ -237,24 +225,22 @@ document.addEventListener('DOMContentLoaded', () => {
   function resetMatchedCards(callback) {
     const matchedCards = cards.filter((card) => card.isMatched)
 
-    // Verificar si hay cartas que hicieron match
     if (matchedCards.length === 0) {
-      if (callback) callback() // Llamar al callback inmediatamente si no hay cartas
+      if (callback) callback()
       return
     }
 
     matchedCards.forEach((card) => {
       const cardElement = document.querySelector(`[data-index="${card.id}"]`)
       if (cardElement) {
-        card.isFlipped = false // Marcar como no volteada
-        flipCard(card.id, false) // Usar la animación de volteo existente
+        card.isFlipped = false
+        flipCard(card.id, false)
       }
     })
 
-    // Esperar a que termine la animación antes de continuar
     setTimeout(() => {
       if (callback) callback()
-    }, 400) // Ajusta este tiempo según la duración de tu animación
+    }, 400)
   }
 
   function restartGame() {
@@ -271,13 +257,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // Event listeners
   document.getElementById('restart-button').addEventListener('click', () => {
     resetMatchedCards(() => {
-      restartGame() // Reinicia el juego después de voltear las cartas
+      restartGame()
     })
   })
 
   document.getElementById('play-again').addEventListener('click', () => {
     resetMatchedCards(() => {
-      restartGame() // Reinicia el juego después de voltear las cartas
+      restartGame()
     })
   })
 
